@@ -1,4 +1,118 @@
 [{
+		"title": "organizr",
+		"description": "organizr",
+		"image": "lsiocommunity/organizr:latest",
+		"ports": [
+			"80/tcp"
+		],
+		"logo": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/organizr-icon.png",
+		"volumes": [
+			"/config"
+		],
+		"env": [{
+				"name": "PUID",
+				"label": "UserID"
+			},
+			{
+				"name": "PGID",
+				"label": "GroupID"
+			},
+			{
+				"name": "TZ",
+				"label": "Timezone - eg Europe/London"
+			}
+		],
+		"note": "<h1>lsiocommunity/organizr with FreeNAS metadata</h1>\n<p>HTPC/Homelab Services Organizer - Written in PHP</p>\n<p><a href=\"https://github.com/causefx/Organizr\"><img alt=\"organizr\" src=\"https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/organizr-icon.png\" /></a></p>\n<h2>Parameters</h2>\n<p><code>The parameters are split into two halves, separated by a colon, the left hand side representing the host and the right the container side. \nFor example with a port -p external:internal - what this shows is the port mapping from internal to external of the container.\nSo -p 8080:80 would expose port 80 from inside the container to be accessible from the host's IP on port 8080\nhttp://192.168.x.x:8080 would show you what's running INSIDE the container on port 80.</code></p>\n<ul>\n<li><code>-p 80</code> - the port(s)</li>\n<li><code>-v /config</code> - config files for organizr</li>\n<li><code>-e PGID</code> for GroupID - see below for explanation</li>\n<li><code>-e PUID</code> for UserID - see below for explanation</li>\n</ul>\n<p>It is based on alpine linux with s6 overlay, for shell access whilst the container is running do <code>docker exec -it organizr /bin/bash</code>.</p>\n<h3>User / Group Identifiers</h3>\n<p>Sometimes when using data volumes (<code>-v</code> flags) permissions issues can arise between the host OS and the container. We avoid this issue by allowing you to specify the user <code>PUID</code> and group <code>PGID</code>. Ensure the data volume directory on the host is owned by the same user you specify and it will \"just work\" \u2122.</p>\n<p>In this instance <code>PUID=1001</code> and <code>PGID=1001</code>. To find yours use <code>id user</code> as below:</p>\n<p><code>$ id &lt;dockeruser&gt;\n    uid=1001(dockeruser) gid=1001(dockergroup) groups=1001(dockergroup)</code></p>\n<h2>Setting up the application</h2>\n<p>Setup accounts etc via the webui, more info at <a href=\"https://github.com/causefx/Organizr\">Organizr</a>.</p>\n<h2>Info</h2>\n<ul>\n<li>Shell access whilst the container is running: <code>docker exec -it organizr /bin/bash</code></li>\n<li>To monitor the logs of the container in realtime: <code>docker logs -f organizr</code></li>\n</ul>"
+	},
+	{
+		"title": "Dokuwiki",
+		"description": "DokuWiki is a simple to use and highly versatile Open Source wiki software that doesn't require a database.",
+		"categories": ["wiki"],
+		"platform": "linux",
+		"logo": "https://www.dokuwiki.org/lib/tpl/dokuwiki/images/logo.png",
+		"image": "moritanosuke/dokuwiki-docker:latest",
+		"ports": [
+			"80/tcp"
+		],
+		"volumes": [
+			"/dokuwiki-data",
+			"/dokuwiki-conf",
+			"/dokuwiki-plugins"
+		],
+		"restart_policy": "always"
+	},
+	{
+		"title": "influxdb",
+		"description": "influxdb",
+		"image": "influxdb:latest",
+		"ports": [
+			"8083/tcp",
+			"8086/tcp",
+			"2003/tcp"
+		],
+		"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Influxdb_logo.svg/1200px-Influxdb_logo.svg.png",
+		"volumes": [
+			"/var/lib/influxdb",
+			"/etc/influxdb"
+		],
+		"env": [{
+				"name": "INFLUXDB_GRAPHITE_ENABLED",
+				"label": "true/false uses port 2003"
+			},
+			{
+				"name": "INFLUXDB_GRAPHITE_DATABASE",
+				"label": "The name of the database that you want to write to."
+			},
+			{
+				"name": "INFLUXDB_REPORTING_DISABLED",
+				"label": "true will not sent anon data to usage.influxdata.com every 24 hours"
+			},
+			{
+				"name": "INFLUXDB_ADMIN_ENABLED",
+				"label": "Set to true to enable the admin interface"
+			},
+			{
+				"name": "PUID",
+				"label": "UserID"
+			},
+			{
+				"name": "PGID",
+				"label": "GroupID"
+			},
+			{
+				"name": "TZ",
+				"label": "Timezone - eg Europe/London"
+			}
+		],
+		"note": "<p><a href=\"https://hub.docker.com/_/influxdb/\"><img alt=\"influxdb\" src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Influxdb_logo.svg/1200px-Influxdb_logo.svg.png\" /></a></p>\n<h3>InfluxDB</h3>\n<p>InfluxDB is a time series database built from the ground up to handle high write and query loads. InfluxDB is meant to be used as a backing store for any use case involving large amounts of timestamped data, including DevOps monitoring, application metrics, IoT sensor data, and real-time analytics.</p>\n<p>[![influxdb_docs]https://docs.influxdata.com/influxdb/latest/)</p>\n<h2>Exposed ports</h2>\n<p>The following ports are important and are used by InfluxDB.</p>\n<ul>\n<li>8086 HTTP API port</li>\n<li>8083 Administrator interface port</li>\n<li>2003 Graphite support, if it is enabled</li>\n</ul>"
+	},
+	{
+		"title": "grafana",
+		"description": "grafana",
+		"image": "grafana/grafana:latest",
+		"ports": [
+			"3000/tcp"
+		],
+		"volumes": [
+			"/var/lib/grafana",
+			"/var/log/grafana"
+		],
+		"env": [{
+				"name": "GF_INSTALL_PLUGINS",
+				"label": "CSV List of plugins to install"
+			},
+			{
+				"name": "GF_SERVER_ROOT_URL",
+				"label": "Grafana server root URL"
+			},
+			{
+				"name": "GF_SECURITY_ADMIN_PASSWORD",
+				"label": "Grafana server admin password"
+			}
+		],
+		"note": "<h1>A Grafana server (system statistics monitoring visualization toolkit).</h1>\n<p>Base container is grafana/grafana with FreeNAS metadata added. All variables in conf/grafana.ini can be overriden using environment variables.</p>\n<h3>How to setup Grafana to receive data from FreeNAS' Graphite sender</h3>\n<ol>\n<li>Open up the WebUI and login with the username <strong>admin</strong> and the password <strong>admin</strong></li>\n<li>Once at the <em>Home</em> dashboard click on the spiral in the upper left-hand corner and click <em>Data Sources</em></li>\n<li>Select <em>Add Data Source</em>, then select a name for the data source, mark it as <em>Default</em> if you would like; leave the type as <em>Graphite</em>; set the URL to the the IP of your Graphite Docker Container (which should already be setup to receive data from FreeNAS) and use <strong>port 80</strong> if the container is <strong>bridged</strong>, otherwise use <strong>port 5080</strong>; leave everything under <em>HTTP Auth</em> alone; click on the <em>Dashboards</em> tab and select <em>import</em> for <em>Graphite Carbon Metrics</em>; finally click <em>Add</em> under the config tab</li>\n</ol>\n<p>Congratulations you have just setup Grafana to receive data from FreeNAS via the Graphite Docker Container! Now the real fun can begin.</p>\n<h3>How to get Grafana to display the received data in pretty graphs</h3>\n<ol>\n<li>You can click on either the spiral and select <em>Dashboards</em> and click <em>New</em> or click on the dashboard drop down menu (between the spiral and the gear) and select <em>Create New</em> at the bottom. This will bring you to a new dashboard where you can create a customized dashboard to pretty much show whatever you want, and pretty much however you want. It's highly configurable!</li>\n<li>Let's create a graph for CPU temperature in degrees Celsius for one of our CPU cores, so select the <em>Graph</em> panel, which will create a new graph, which will be empty.</li>\n<li>To fill it up with data click the word <em>Panel Title</em> which will open up a small menu above the words, click <em>Edit</em></li>\n<li>This will open up a edit menu. Under the <em>Metrics</em> tab, in the row labeled <em>A</em> click on <em>Select Metric</em> and select <em>localhost</em> (at least that's what mine says); click <em>Select Metric</em> once again and select <em>cputemp-0</em>; Select <em>Temperature</em> from the next field; Select <em>Value</em> from the field after that</li>\n<li>Once the last value is set the graph auto-generates right before your eyes like magic! There's more customization to be done, unless you want to read your temperatures using the Kelvin scale</li>\n<li>Click on the <em>Axes</em> tab and set <em>Scale</em> under <em>Left Y</em> to <em>Celsius</em> under the <em>Temperature</em> menu</li>\n<li>You can overlay more cores on to the same graph by clicking on the button with the three lines in row <em>A</em>, then selecting <em>Duplicate</em>, all you have to change is the second field (cputemp-N)</li>\n<li>Under the <em>General</em> tab you can enter a name to describe this graph using the <em>Title</em> field</li>\n<li>Once you're finished customizing the graph click the <em>X</em> to close the <em>Edit</em> panel, then click the <em>Save</em> icon between the <em>Dashboard</em> menu and the gear icon. Give the Panel a name, and click save. You can add more panels to the same dashboard using the same steps before or after saving the dashboard.</li>\n</ol>\n<p>Here is a instructional video from the creators of Graphana explaining this in visual form:</p>\n<p><a href=\"http://www.youtube.com/watch?feature=player_embedded&v=sKNZMtoSHN4\n\" target=\"_blank\"><img src=\"http://img.youtube.com/vi/sKNZMtoSHN4/0.jpg\" \nalt=\"Creating a New Dashboard\" width=\"240\" height=\"180\" border=\"10\" /></a></p>\n<h3>ENV Variables</h3>\n<ul>\n<li>GF_INSTALL_PLUGINS </li>\n<li>Set this variable to a CSV list of Grafana plugins to install, this will pass each plugin name to <code>grafana-cli plugins install</code>. For example <code>grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel</code>. </li>\n</ul>"
+	},
+	{
 		"type": "container",
 		"title": "letsencrypt",
 		"description": "This container sets up an Nginx webserver and reverse proxy with php support and a built-in letsencrypt client that automates free SSL server certificate generation and renewal processes. It also contains fail2ban for intrusion prevention.\r\n  \r\n  Before running this container, make sure that the url and subdomains are properly forwarded to this container's host.\r\n  \r\n  - Port 443 on the internet side of the router should be forwarded to this container's port 443.\r\n  - If you need a dynamic dns provider, you can use the free provider duckdns.org where the url will be yoursubdomain.duckdns.org and the subdomains    can be www,ftp,cloud\r\n  - The container detects changes to url and subdomains, revokes existing certs and generates new ones during start. \r\n  - It also detects changes to the DHLEVEL parameter and replaces the dhparams file.\r\n  \r\n  - If you'd like to password protect your sites, you can use htpasswd. Run the following command on your host to generate the htpasswd file docker exec -it letsencrypt htpasswd -c /config/nginx/.htpasswd &lt;username&gt;",
@@ -14,40 +128,38 @@
 			"443/tcp"
 		],
 		"volumes": [{
-				"container": "/config",
-				"bind": "/root/appdata/letsencrypt"
-			}
-		],
+			"container": "/config",
+			"bind": "/root/appdata/letsencrypt"
+		}],
 		"env": [{
-				"name": "EMAIL",
-				"label": "EMAIL",
-				"set": "atribe13@gmail.com"
-			}, {
-				"name": "URL",
-				"label": "URL",
-				"set": "tribe.ddns.net"
-			}, {
-				"name": "SUBDOMAINS",
-				"label": "SUBDOMAINS",
-				"set": ""
-			}, {
-				"name": "ONLY_SUBDOMAINS",
-				"label": "ONLY_SUBDOMAINS",
-				"set": "false"
-			}, {
-				"name": "DHLEVEL",
-				"label": "DHLEVEL",
-				"set": "2048"
-			}, {
-				"name": "PUID",
-				"label": "PUID",
-				"set": "1001"
-			}, {
-				"name": "PGID",
-				"label": "PGID",
-				"set": "1001"
-			}
-		]
+			"name": "EMAIL",
+			"label": "EMAIL",
+			"set": "atribe13@gmail.com"
+		}, {
+			"name": "URL",
+			"label": "URL",
+			"set": "tribe.ddns.net"
+		}, {
+			"name": "SUBDOMAINS",
+			"label": "SUBDOMAINS",
+			"set": ""
+		}, {
+			"name": "ONLY_SUBDOMAINS",
+			"label": "ONLY_SUBDOMAINS",
+			"set": "false"
+		}, {
+			"name": "DHLEVEL",
+			"label": "DHLEVEL",
+			"set": "2048"
+		}, {
+			"name": "PUID",
+			"label": "PUID",
+			"set": "1001"
+		}, {
+			"name": "PGID",
+			"label": "PGID",
+			"set": "1001"
+		}]
 	}, {
 		"type": "container",
 		"title": "plexpy",
@@ -60,29 +172,27 @@
 		],
 		"restart_policy": "always",
 		"volumes": [{
-				"container": "/config",
-				"bind": "/root/appdata/plexpy"
-			}, {
-				"container": "/logs:ro",
-				"bind": "/root/appdata/plex/Library/Application Support/Plex Media Server/Logs"
-			}
-		],
+			"container": "/config",
+			"bind": "/root/appdata/plexpy"
+		}, {
+			"container": "/logs:ro",
+			"bind": "/root/appdata/plex/Library/Application Support/Plex Media Server/Logs"
+		}],
 		"env": [{
-				"name": "PUID",
-				"label": "PUID",
-				"set": "1001"
-			}, {
-				"name": "PGID",
-				"label": "PGID",
-				"set": "1001"
-			}, {
-				"name": "VERSION",
-				"label": "VERSION",
-				"set": "latest"
-			}, {
-				"TZ": "America/Denver"
-			}
-		],
+			"name": "PUID",
+			"label": "PUID",
+			"set": "1001"
+		}, {
+			"name": "PGID",
+			"label": "PGID",
+			"set": "1001"
+		}, {
+			"name": "VERSION",
+			"label": "VERSION",
+			"set": "latest"
+		}, {
+			"TZ": "America/Denver"
+		}],
 		"ports": [
 			"8181/tcp"
 		]
@@ -98,26 +208,24 @@
 		],
 		"restart_policy": "always",
 		"volumes": [{
-				"container": "/var/cache/apt-cacher-ng",
-				"bind": "/root/appdata/apt-cacher-ng"
-			}
-		],
+			"container": "/var/cache/apt-cacher-ng",
+			"bind": "/root/appdata/apt-cacher-ng"
+		}],
 		"env": [{
-				"name": "PUID",
-				"label": "PUID",
-				"set": "1001"
-			}, {
-				"name": "PGID",
-				"label": "PGID",
-				"set": "1001"
-			}, {
-				"name": "VERSION",
-				"label": "VERSION",
-				"set": "latest"
-			}, {
-				"TZ": "America/Denver"
-			}
-		],
+			"name": "PUID",
+			"label": "PUID",
+			"set": "1001"
+		}, {
+			"name": "PGID",
+			"label": "PGID",
+			"set": "1001"
+		}, {
+			"name": "VERSION",
+			"label": "VERSION",
+			"set": "latest"
+		}, {
+			"TZ": "America/Denver"
+		}],
 		"ports": [
 			"3142/tcp"
 		]
@@ -135,35 +243,33 @@
 		],
 		"restart_policy": "always",
 		"volumes": [{
-				"container": "/config",
-				"bind": "/root/appdata/plex"
-			}, {
-				"container": "/data/movies",
-				"bind": "/mnt/pve/media/movies"
-			}, {
-				"container": "/data/tv",
-				"bind": "/mnt/pve/media/tv"
-			}, {
-				"container": "/data/audiobooks",
-				"bind": "/mnt/pve/media/audiobooks"
-			}
-		],
+			"container": "/config",
+			"bind": "/root/appdata/plex"
+		}, {
+			"container": "/data/movies",
+			"bind": "/mnt/pve/media/movies"
+		}, {
+			"container": "/data/tv",
+			"bind": "/mnt/pve/media/tv"
+		}, {
+			"container": "/data/audiobooks",
+			"bind": "/mnt/pve/media/audiobooks"
+		}],
 		"env": [{
-				"name": "PUID",
-				"label": "PUID",
-				"set": "1001"
-			}, {
-				"name": "PGID",
-				"label": "PGID",
-				"set": "1001"
-			}, {
-				"name": "VERSION",
-				"label": "VERSION",
-				"set": "latest"
-			}, {
-				"TZ": "America/Denver"
-			}
-		],
+			"name": "PUID",
+			"label": "PUID",
+			"set": "1001"
+		}, {
+			"name": "PGID",
+			"label": "PGID",
+			"set": "1001"
+		}, {
+			"name": "VERSION",
+			"label": "VERSION",
+			"set": "latest"
+		}, {
+			"TZ": "America/Denver"
+		}],
 		"ports": [
 			"32400/tcp",
 			"32400/udp",
@@ -181,10 +287,9 @@
 		"logo": "https://cloudinovasi.id/assets/img/logos/registry.png",
 		"image": "centurylink/watchtower",
 		"volumes": [{
-				"container": "/var/run/docker.sock",
-				"bind": "/var/run/docker.sock"
-			}
-		]
+			"container": "/var/run/docker.sock",
+			"bind": "/var/run/docker.sock"
+		}]
 	}, {
 		"type": "container",
 		"title": "Registry",
@@ -243,10 +348,9 @@
 		"logo": "https://cloudinovasi.id/assets/img/logos/mysql.png",
 		"image": "mysql:latest",
 		"env": [{
-				"name": "MYSQL_ROOT_PASSWORD",
-				"label": "Root password"
-			}
-		],
+			"name": "MYSQL_ROOT_PASSWORD",
+			"label": "Root password"
+		}],
 		"ports": [
 			"3306/tcp"
 		],
@@ -260,10 +364,9 @@
 		"logo": "https://cloudinovasi.id/assets/img/logos/mariadb.png",
 		"image": "mariadb:latest",
 		"env": [{
-				"name": "MYSQL_ROOT_PASSWORD",
-				"label": "Root password"
-			}
-		],
+			"name": "MYSQL_ROOT_PASSWORD",
+			"label": "Root password"
+		}],
 		"ports": [
 			"3306/tcp"
 		],
@@ -277,13 +380,12 @@
 		"logo": "https://cloudinovasi.id/assets/img/logos/postgres.png",
 		"image": "postgres:latest",
 		"env": [{
-				"name": "POSTGRES_USER",
-				"label": "Superuser"
-			}, {
-				"name": "POSTGRES_PASSWORD",
-				"label": "Superuser password"
-			}
-		],
+			"name": "POSTGRES_USER",
+			"label": "Superuser"
+		}, {
+			"name": "POSTGRES_PASSWORD",
+			"label": "Superuser password"
+		}],
 		"ports": [
 			"5432/tcp"
 		],
@@ -355,13 +457,12 @@
 			"22/tcp"
 		],
 		"volumes": [{
-				"container": "/etc/gitlab"
-			}, {
-				"container": "/var/log/gitlab"
-			}, {
-				"container": "/var/opt/gitlab"
-			}
-		]
+			"container": "/etc/gitlab"
+		}, {
+			"container": "/var/log/gitlab"
+		}, {
+			"container": "/var/opt/gitlab"
+		}]
 	}, {
 		"type": "container",
 		"title": "Minio",
@@ -374,13 +475,12 @@
 			"9000/tcp"
 		],
 		"env": [{
-				"name": "MINIO_ACCESS_KEY",
-				"label": "Minio access key"
-			}, {
-				"name": "MINIO_SECRET_KEY",
-				"label": "Minio secret key"
-			}
-		],
+			"name": "MINIO_ACCESS_KEY",
+			"label": "Minio access key"
+		}, {
+			"name": "MINIO_SECRET_KEY",
+			"label": "Minio secret key"
+		}],
 		"volumes": ["/export", "/root/.minio"],
 		"command": "server /export"
 	}, {
@@ -395,13 +495,12 @@
 			"8000/tcp"
 		],
 		"env": [{
-				"name": "SCALITY_ACCESS_KEY",
-				"label": "Scality S3 access key"
-			}, {
-				"name": "SCALITY_SECRET_KEY",
-				"label": "Scality S3 secret key"
-			}
-		],
+			"name": "SCALITY_ACCESS_KEY",
+			"label": "Scality S3 access key"
+		}, {
+			"name": "SCALITY_SECRET_KEY",
+			"label": "Scality S3 secret key"
+		}],
 		"volumes": ["/usr/src/app/localData", "/usr/src/app/localMetadata"]
 	}, {
 		"type": "container",
@@ -416,13 +515,12 @@
 			"1433/tcp"
 		],
 		"env": [{
-				"name": "ACCEPT_EULA",
-				"set": "Y"
-			}, {
-				"name": "SA_PASSWORD",
-				"label": "SA password"
-			}
-		]
+			"name": "ACCEPT_EULA",
+			"set": "Y"
+		}, {
+			"name": "SA_PASSWORD",
+			"label": "SA password"
+		}]
 	}, {
 		"type": "container",
 		"title": "SQL Server",
@@ -436,13 +534,12 @@
 			"1433/tcp"
 		],
 		"env": [{
-				"name": "ACCEPT_EULA",
-				"set": "Y"
-			}, {
-				"name": "sa_password",
-				"label": "SA password"
-			}
-		],
+			"name": "ACCEPT_EULA",
+			"set": "Y"
+		}, {
+			"name": "sa_password",
+			"label": "SA password"
+		}],
 		"volumes": ["C:/temp/"]
 	}, {
 		"type": "container",
@@ -457,13 +554,12 @@
 			"1433/tcp"
 		],
 		"env": [{
-				"name": "ACCEPT_EULA",
-				"set": "Y"
-			}, {
-				"name": "sa_password",
-				"label": "SA password"
-			}
-		],
+			"name": "ACCEPT_EULA",
+			"set": "Y"
+		}, {
+			"name": "sa_password",
+			"label": "SA password"
+		}],
 		"volumes": ["C:/temp/"]
 	}, {
 		"type": "container",
@@ -536,14 +632,13 @@
 		"logo": "https://cloudinovasi.id/assets/img/logos/wordpress.png",
 		"image": "wordpress:latest",
 		"env": [{
-				"name": "WORDPRESS_DB_HOST",
-				"label": "MySQL database host",
-				"type": "container"
-			}, {
-				"name": "WORDPRESS_DB_PASSWORD",
-				"label": "Database password"
-			}
-		],
+			"name": "WORDPRESS_DB_HOST",
+			"label": "MySQL database host",
+			"type": "container"
+		}, {
+			"name": "WORDPRESS_DB_PASSWORD",
+			"label": "Database password"
+		}],
 		"ports": [
 			"80/tcp"
 		],
@@ -557,14 +652,13 @@
 		"logo": "https://cloudinovasi.id/assets/img/logos/joomla.png",
 		"image": "joomla:latest",
 		"env": [{
-				"name": "JOOMLA_DB_HOST",
-				"label": "MySQL database host",
-				"type": "container"
-			}, {
-				"name": "JOOMLA_DB_PASSWORD",
-				"label": "Database password"
-			}
-		],
+			"name": "JOOMLA_DB_HOST",
+			"label": "MySQL database host",
+			"type": "container"
+		}, {
+			"name": "JOOMLA_DB_PASSWORD",
+			"label": "Database password"
+		}],
 		"ports": [
 			"80/tcp"
 		],
@@ -616,14 +710,13 @@
 		"logo": "https://cloudinovasi.id/assets/img/logos/mautic.png",
 		"image": "mautic/mautic:latest",
 		"env": [{
-				"name": "MAUTIC_DB_HOST",
-				"label": "MySQL database host",
-				"type": "container"
-			}, {
-				"name": "MAUTIC_DB_PASSWORD",
-				"label": "Database password"
-			}
-		],
+			"name": "MAUTIC_DB_HOST",
+			"label": "MySQL database host",
+			"type": "container"
+		}, {
+			"name": "MAUTIC_DB_PASSWORD",
+			"label": "Database password"
+		}],
 		"ports": [
 			"80/tcp"
 		],
@@ -637,14 +730,13 @@
 		"logo": "https://cloudinovasi.id/assets/img/logos/wowza.png",
 		"image": "sameersbn/wowza:4.1.2-8",
 		"env": [{
-				"name": "WOWZA_ACCEPT_LICENSE",
-				"label": "Agree to Wowza EULA",
-				"set": "yes"
-			}, {
-				"name": "WOWZA_KEY",
-				"label": "License key"
-			}
-		],
+			"name": "WOWZA_ACCEPT_LICENSE",
+			"label": "Agree to Wowza EULA",
+			"set": "yes"
+		}, {
+			"name": "WOWZA_KEY",
+			"label": "License key"
+		}],
 		"ports": [
 			"1935/tcp",
 			"8086/tcp",
@@ -665,10 +757,9 @@
 			"50000/tcp"
 		],
 		"env": [{
-				"name": "JENKINS_OPTS",
-				"label": "Jenkins options"
-			}
-		],
+			"name": "JENKINS_OPTS",
+			"label": "Jenkins options"
+		}],
 		"volumes": ["/var/jenkins_home"]
 	}, {
 		"type": "container",
@@ -691,17 +782,16 @@
 		"logo": "https://cloudinovasi.id/assets/img/logos/odoo.png",
 		"image": "odoo:latest",
 		"env": [{
-				"name": "HOST",
-				"label": "PostgreSQL database host",
-				"type": "container"
-			}, {
-				"name": "USER",
-				"label": "Database user"
-			}, {
-				"name": "PASSWORD",
-				"label": "Database password"
-			}
-		],
+			"name": "HOST",
+			"label": "PostgreSQL database host",
+			"type": "container"
+		}, {
+			"name": "USER",
+			"label": "Database user"
+		}, {
+			"name": "PASSWORD",
+			"label": "Database password"
+		}],
 		"ports": [
 			"8069/tcp"
 		],
@@ -728,10 +818,9 @@
 		"logo": "https://cloudinovasi.id/assets/img/logos/ortussolutions-commandbox.png",
 		"image": "ortussolutions/commandbox:latest",
 		"env": [{
-				"name": "CFENGINE",
-				"set": "lucee@4.5"
-			}
-		],
+			"name": "CFENGINE",
+			"set": "lucee@4.5"
+		}],
 		"ports": [
 			"8080/tcp", "8443/tcp"
 		]
@@ -744,16 +833,15 @@
 		"logo": "https://cloudinovasi.id/assets/img/logos/ortussolutions-contentbox.png",
 		"image": "ortussolutions/contentbox:latest",
 		"env": [{
-				"name": "express",
-				"set": "true"
-			}, {
-				"name": "install",
-				"set": "true"
-			}, {
-				"name": "CFENGINE",
-				"set": "lucee@4.5"
-			}
-		],
+			"name": "express",
+			"set": "true"
+		}, {
+			"name": "install",
+			"set": "true"
+		}, {
+			"name": "CFENGINE",
+			"set": "lucee@4.5"
+		}],
 		"ports": [
 			"8080/tcp", "8443/tcp"
 		],
@@ -795,10 +883,9 @@
 			"stackfile": "stacks/wordpress/docker-stack.yml"
 		},
 		"env": [{
-				"name": "MYSQL_ROOT_PASSWORD",
-				"label": "Database root password",
-				"description": "Password used by the MySQL root user."
-			}
-		]
+			"name": "MYSQL_ROOT_PASSWORD",
+			"label": "Database root password",
+			"description": "Password used by the MySQL root user."
+		}]
 	}
 ]
