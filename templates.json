@@ -1,5 +1,31 @@
 [{
 	"type": "container",
+	"title": "MineOS-Node",
+	"description": "MineOS built in Node.js",
+	"categories": ["games"],
+	"platform": "linux",
+	"image": "hexparrot/mineos:debian-jessie",
+	"ports": [
+		"8443/tcp",
+		"25565/tcp",
+		"25566/tcp",
+		"25567/tcp",
+		"25568/tcp",
+		"25569/tcp",
+		"25570/tcp",
+	],
+	"volumes": [{
+		"container": "/var/games/minecraft",
+		"bind": "/root/appdata/minecraft"
+	}],
+	"env": [{
+			"name": "USER_PASSWORD",
+			"label": "Admin Interface Password"
+		}],
+	"restart_policy": "always"
+},
+	{
+	"type": "container",
 		"title": "organizr",
 		"description": "organizr",
 		"image": "lsiocommunity/organizr:latest",
