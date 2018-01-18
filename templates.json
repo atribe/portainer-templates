@@ -4,7 +4,7 @@
 	"description": "MineOS built in Node.js",
 	"categories": ["games"],
 	"platform": "linux",
-	"image": "hexparrot/mineos:debian-jessie",
+	"image": "hexparrot/mineos",
 	"ports": [
 		"8443/tcp",
 		"25565/tcp",
@@ -19,11 +19,11 @@
 		"bind": "/root/appdata/minecraft"
 	}],
 	"env": [{
-			"name": "USER_PASSWORD",
-			"label": "Admin Interface Password"
-		}],
+				"name": "USER_PASSWORD",
+				"label": "Web Interface Admin Password"
+			}],
 	"restart_policy": "always"
-},
+	},
 	{
 	"type": "container",
 		"title": "organizr",
