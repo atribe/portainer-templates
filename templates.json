@@ -12,7 +12,7 @@
 		"25567/tcp",
 		"25568/tcp",
 		"25569/tcp",
-		"25570/tcp",
+		"25570/tcp"
 	],
 	"volumes": [{
 		"container": "/var/games/minecraft",
